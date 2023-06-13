@@ -1,0 +1,57 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+//halaman utama
+Route::get('/', function () {
+    return view('welcome');
+})->name('/');
+
+Route::get("/",[HomeController::class,"index"]);
+
+Route::get("/food",[HomeController::class,"menu"]);
+
+Route::get("/users",[AdminController::class,"user"]);
+
+Route::get("/foodmenu",[AdminController::class,"foodmenu"]);
+
+Route::post("/uploadfood",[AdminController::class,"upload"]);
+
+Route::get("/deletemenu/{id}",[AdminController::class,"deletemenu"]);
+
+Route::get("/updateview/{id}",[AdminController::class,"updateview"]);
+
+Route::post("/update/{id}",[AdminController::class,"update"]);
+
+//untuk delete user
+Route::get("/deleteuser/{id}",[AdminController::class,"deleteuser"]);
+
+Route::post("/addcart/{id}",[HomeController::class,"addcart"]);
+
+Route::get("/showcart/{id}",[HomeController::class,"showcart"]);
+
+Route::get("/remove/{id}",[HomeController::class,"remove"]);
+
+//membedakan login admin dan user 
+Route::get("redirects",[HomeController::class,"redirects"]);
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
